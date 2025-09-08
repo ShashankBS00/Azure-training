@@ -18,9 +18,16 @@
     if (title) title.textContent = 'Welcome' + (name ? ` — ${name}` : '');
   };
 
-  // Toggle the CSS class (keeps styling concerns in CSS)
+  // Cycle through all colors
+  const colors = [
+    "red", "green", "blue", "yellow", "pink", 
+    "purple", "orange", "cyan", "lime", "lightblue", "white", "black"
+  ];
+  let currentColor = 0;
+
   window.changeBackground = function () {
-    document.body.classList.toggle('alt-bg');
+    document.body.style.backgroundColor = colors[currentColor];
+    currentColor = (currentColor + 1) % colors.length;
   };
 
   // Render numbers into the UI (fallback to console if element missing)
