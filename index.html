@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Mini Project — Interactive Demo</title>
+    <meta name="description" content="Small interactive demo: greeting, background, numbers, and message toggle." />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="brand">Mini Project</h1>
+            <p class="tagline">A small interactive demo with clean, accessible markup.</p>
+        </div>
+    </header>
+
+    <main class="container" id="main" role="main">
+        <section class="card" aria-labelledby="title">
+            <h2 id="title" class="card-title">Welcome!</h2>
+            <p id="message" class="muted">Click the controls to interact.</p>
+
+            <div class="controls">
+                <label for="name" class="sr-only">Your name</label>
+                <input id="name" type="text" placeholder="Enter your name" />
+
+                <div class="btn-row" role="group" aria-label="Actions">
+                    <button id="greetBtn" class="btn primary">Greet</button>
+                    <button id="bgBtn" class="btn">Change Background</button>
+                    <button id="numBtn" class="btn">Show Numbers</button>
+                    <button id="toggleBtn" class="btn">Show / Hide Message</button>
+                </div>
+            </div>
+
+            <div class="output">
+                <p id="greeting" class="output-box" aria-live="polite"></p>
+                <p id="numbers" class="output-box" aria-live="polite"></p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> Mini Project — Built for demo</small>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+    // Graceful hookup for existing functions in script.js
+    (function () {
+        const $ = id => document.getElementById(id);
+        if (!$('greetBtn')) return;
+
+        $('greetBtn').addEventListener('click', () => {
+            const name = $('name').value.trim();
+            if (typeof window.greetUser === 'function') {
+                // prefer existing function if provided
+                window.greetUser(name);
+            } else {
+                $('greeting').textContent = name ? `Hello, ${name}!` : 'Hello!';
+            }
+        });
+
+        $('bgBtn').addEventListener('click', () => {
+            if (typeof window.changeBackground === 'function') {
+                window.changeBackground();
+            } else {
+                document.body.classList.toggle('alt-bg');
+            }
+        });
+
+        $('numBtn').addEventListener('click', () => {
+            if (typeof window.showNumbers === 'function') {
+                window.showNumbers();
+            } else {
+                $('numbers').textContent = Array.from({length:5}, (_,i)=>i+1).join(', ');
+            }
+        });
+
+        $('toggleBtn').addEventListener('click', () => {
+            if (typeof window.toggleMessage === 'function') {
+                window.toggleMessage();
+            } else {
+                $('message').classList.toggle('hidden');
+            }
+        });
+
+        // small niceties
+        document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+    </script>
+</body>
+</html>
