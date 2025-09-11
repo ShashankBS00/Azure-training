@@ -1,50 +1,22 @@
-// ...existing code...
-(function () {
-  'use strict';
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registrationForm');
+    const skillLevel = document.getElementById('skillLevel');
+    const skillOutput = document.querySelector('output[for="skillLevel"]');
 
-  const setText = (id, text) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = text;
-  };
+    // Update skill level output
+    skillLevel.addEventListener('input', function(e) {
+        skillOutput.textContent = e.target.value;
+    });
 
-  // Accepts an optional name (index.html will pass name). Falls back to prompt if none.
-  window.greetUser = function (name) {
-    if (typeof name !== 'string' || !name.trim()) {
-      name = prompt('Enter your name:') || '';
-    }
-    name = name.trim();
-    setText('greeting', name ? `Hello, ${name}!` : 'Hello!');
-    const title = document.getElementById('title');
-    if (title) title.textContent = 'Welcome' + (name ? ` — ${name}` : '');
-  };
+    // Form validation
+    form.addEventListener('submit', function(e) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
 
-  // Cycle through all colors
-  const colors = [
-    "red", "green", "blue", "yellow", "pink", 
-    "purple", "orange", "cyan", "lime", "lightblue", "white", "black"
-  ];
-  let currentColor = 0;
-
-  window.changeBackground = function () {
-    document.body.style.backgroundColor = colors[currentColor];
-    currentColor = (currentColor + 1) % colors.length;
-  };
-
-  // Render numbers into the UI (fallback to console if element missing)
-  window.showNumbers = function () {
-    const numbersEl = document.getElementById('numbers');
-    if (!numbersEl) {
-      for (let i = 1; i <= 5; i++) console.log('Number ' + i);
-      return;
-    }
-    const nums = Array.from({ length: 5 }, (_, i) => i + 1).join(', ');
-    numbersEl.textContent = nums;
-  };
-
-  // Toggle visibility using the `.hidden` class (keeps transitions / accessibility consistent)
-  window.toggleMessage = function () {
-    const msg = document.getElementById('message');
-    if (!msg) return;
-    msg.classList.toggle('hidden');
-  };
-})();
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Passwords do not match!');
+            return false;
+        }
+    });
+});
